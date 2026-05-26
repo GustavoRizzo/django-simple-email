@@ -1,10 +1,10 @@
 
-# django-my-lib 🚀
+# django-simple-email
 
-[![PyPI](https://img.shields.io/pypi/v/django-my-lib.svg)](https://pypi.org/project/django-my-lib/)
+[![PyPI](https://img.shields.io/pypi/v/django-simple-email.svg)](https://pypi.org/project/django-simple-email/)
 
 
-> This project is a test for creating a Django library. 🧩
+> A simple Django app for sending emails, providing an easy-to-use interface and reusable components.
 
 ## Table of Contents
 
@@ -23,20 +23,20 @@
 You can install the library using pip or poetry:
 
 ```bash
-pip install django-my-lib
+pip install django-simple-email
 # or
-poetry add django-my-lib
+poetry add django-simple-email
 ```
 
 
 ## Configuration ⚙️
 
-Add `django_my_lib` to the `INSTALLED_APPS` list in your `settings.py`:
+Add `django_simple_email` to the `INSTALLED_APPS` list in your `settings.py`:
 
 ```python
 INSTALLED_APPS = [
     # ... other apps ...
-    'django_my_lib',
+    'django_simple_email',
 ]
 ```
 
@@ -59,8 +59,8 @@ python manage.py migrate
 To run the Django project locally during development, follow the steps below:
 
 ```bash
-git clone https://github.com/GustavoRizzo/django-my-lib.git
-cd django-my-lib
+git clone https://github.com/GustavoRizzo/django-simple-email.git
+cd django-simple-email
 poetry install
 poetry run task run-demo
 ```

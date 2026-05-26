@@ -1,4 +1,4 @@
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, version
 
 from django.conf import settings
 from django.shortcuts import render
@@ -7,7 +7,7 @@ from django.views import View
 
 def _get_version():
     try:
-        return version('django-my-lib')
+        return version('django-simple-email')
     except PackageNotFoundError:
         return 'dev'
 
@@ -19,4 +19,4 @@ class Home(View):
             'url_github': settings.URL_GITHUB,
             'version': _get_version(),
         }
-        return render(request, 'django_my_lib/home.html', context)
+        return render(request, 'django_simple_email/home.html', context)

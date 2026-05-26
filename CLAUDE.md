@@ -1,22 +1,22 @@
-# CLAUDE.md — django-my-lib
+# CLAUDE.md — django-simple-email
 
 ## Project Overview
 
-**django-my-lib** is a reusable Django library template designed to be used as a base for creating and publishing Django packages to PyPI. It includes a `demo_project` for local development and testing.
+**django-simple-email** is a simple Django app for sending emails, providing an easy-to-use interface and reusable components. It includes a `demo_project` for local development and testing.
 
-- **Package:** `django_my_lib`
-- **Current version:** 0.1.7
+- **Package:** `django_simple_email`
+- **Current version:** 0.1.0
 - **Python:** >=3.14
 - **Django:** >=5.2
 - **License:** MIT
-- **PyPI:** https://pypi.org/project/django-my-lib/
-- **GitHub:** https://github.com/GustavoRizzo/django-my-lib
+- **PyPI:** https://pypi.org/project/django-simple-email/
+- **GitHub:** https://github.com/GustavoRizzo/django-simple-email
 
 ## Project Structure
 
 ```
-django-my-lib/
-├── django_my_lib/          # The library package (published to PyPI)
+django-simple-email/
+├── django_simple_email/    # The library package (published to PyPI)
 │   ├── templates/          # HTML templates
 │   ├── templatetags/       # Custom template tags
 │   ├── views.py
@@ -57,7 +57,7 @@ All commands are run with `poetry run task <name>`:
 
 **Manual:**
 ```bash
-poetry version patch   # bump version (e.g. 0.1.7 → 0.1.8)
+poetry version patch   # bump version (e.g. 0.1.0 → 0.1.1)
 poetry build
 poetry publish
 ```
@@ -71,12 +71,12 @@ All project-specific values are centralized in [template.config.json](template.c
 Files that reference template values and will need updating:
 - `template.config.json`
 - `pyproject.toml` (name, description, version, author)
-- `django_my_lib/` → rename folder to new package name
-- `django_my_lib/apps.py` (class name, app name)
+- `django_simple_email/` → rename folder to new package name
+- `django_simple_email/apps.py` (class name, app name)
 - `demo_project/kernel/settings.py` (INSTALLED_APPS, URL_PYPI, URL_GITHUB)
 - `demo_project/kernel/tests/` (app_name references)
-- `django_my_lib/templates/django_my_lib/` → rename folder
-- `django_my_lib/urls.py` (app_name)
+- `django_simple_email/templates/django_simple_email/` → rename folder
+- `django_simple_email/urls.py` (app_name)
 - `README.md`
 - `.github/workflows/` (se quiser CI no novo repositório)
 

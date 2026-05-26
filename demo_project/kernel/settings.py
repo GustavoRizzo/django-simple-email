@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_my_lib',
+    'django_simple_email',
 ]
 
 MIDDLEWARE = [
@@ -122,5 +122,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-URL_PYPI = 'https://pypi.org/project/django-my-lib/'
-URL_GITHUB = 'https://github.com/GustavoRizzo/django-my-lib'
+URL_PYPI = 'https://pypi.org/project/django-simple-email/'
+URL_GITHUB = 'https://github.com/GustavoRizzo/django-simple-email'

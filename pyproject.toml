@@ -1,7 +1,7 @@
 [project]
-name = "django-my-lib"
-version = "0.1.7"
-description = "A handy collection of reusable Django UI components, allowing me to share and integrate elements efficiently across various projects."
+name = "django-simple-email"
+version = "0.1.0"
+description = "A simple Django app for sending emails, providing an easy-to-use interface and reusable components."
 authors = [
     {name = "Gustavo Rizzo S M de Albuquerque",email = "grizzo.albu@gmail.com"}
 ]
@@ -15,9 +15,9 @@ dependencies = [
 [tool.poetry]
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.18.2"
+mypy = "^2.1.0"
 taskipy = "^1.14.1"
-ruff = "^0.14.3"
+ruff = "^0.15.14"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
