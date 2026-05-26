@@ -1,0 +1,73 @@
+[
+  {
+    "model": "django_simple_email.emaillayout",
+    "pk": 1,
+    "fields": {
+      "name": "default",
+      "header_html": "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#f4f4f4;padding:32px 0\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08)\"><tr><td style=\"background:#1a1a2e;padding:24px 32px\"><h1 style=\"margin:0;color:#ffffff;font-family:Arial,sans-serif;font-size:20px;font-weight:600\">{{ company_name }}</h1></td></tr><tr><td style=\"padding:32px\">",
+      "footer_html": "</td></tr><tr><td style=\"background:#f8f8f8;padding:20px 32px;border-top:1px solid #eeeeee\"><p style=\"margin:0;color:#aaaaaa;font-family:Arial,sans-serif;font-size:12px;text-align:center\">© {{ company_name }} &nbsp;·&nbsp; <a href=\"{{ unsubscribe_url }}\" style=\"color:#aaaaaa\">Descadastrar</a></p></td></tr></table></td></tr></table>",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 1,
+    "fields": {
+      "name": "welcome",
+      "description": "Enviado quando um novo usuário se cadastra",
+      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#1a1a2e;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
+      "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
+      "layout": 1,
+      "sample_context": {
+        "name": "Ana Silva",
+        "company_name": "Minha Empresa",
+        "cta_url": "https://example.com/dashboard",
+        "unsubscribe_url": "https://example.com/unsubscribe"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 2,
+    "fields": {
+      "name": "password-reset",
+      "description": "Enviado quando o usuário solicita redefinição de senha",
+      "subject": "Redefinição de senha — {{ company_name }}",
+      "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Recebemos uma solicitação para redefinir a senha da sua conta. Clique no botão abaixo para criar uma nova senha:</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ reset_url }}\" style=\"background:#d62828;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Redefinir senha</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#888888;margin:24px 0 8px\">Este link expira em <strong>{{ expiry_hours }} horas</strong>.</p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:0\">Se você não solicitou a redefinição, ignore este email. Sua senha permanece a mesma.</p>",
+      "text_body": "Olá, {{ name }}!\n\nRecebemos uma solicitação para redefinir sua senha.\n\nAcesse: {{ reset_url }}\n\nEste link expira em {{ expiry_hours }} horas.\n\nSe não foi você, ignore este email.\n\n—\n{{ company_name }}",
+      "layout": 1,
+      "sample_context": {
+        "name": "Carlos Souza",
+        "company_name": "Minha Empresa",
+        "reset_url": "https://example.com/reset?token=abc123",
+        "expiry_hours": 2,
+        "unsubscribe_url": "https://example.com/unsubscribe"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 3,
+    "fields": {
+      "name": "notification",
+      "description": "Notificação genérica sem layout (só o corpo)",
+      "subject": "[{{ company_name }}] {{ title }}",
+      "html_body": "<!DOCTYPE html><html><body style=\"font-family:Arial,sans-serif;color:#333333;max-width:600px;margin:40px auto;padding:0 20px\"><h2 style=\"color:#1a1a2e\">{{ title }}</h2><p style=\"font-size:15px;line-height:1.7;color:#555555\">{{ message }}</p><hr style=\"border:none;border-top:1px solid #eeeeee;margin:24px 0\"><p style=\"font-size:12px;color:#aaaaaa\">{{ company_name }}</p></body></html>",
+      "text_body": "{{ title }}\n\n{{ message }}\n\n—\n{{ company_name }}",
+      "layout": null,
+      "sample_context": {
+        "company_name": "Minha Empresa",
+        "title": "Sua exportação está pronta",
+        "message": "O arquivo solicitado foi gerado e está disponível para download no painel."
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]
