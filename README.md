@@ -1,169 +1,147 @@
-
 # django-simple-email
 
 [![PyPI](https://img.shields.io/pypi/v/django-simple-email.svg)](https://pypi.org/project/django-simple-email/)
+[![Python](https://img.shields.io/pypi/pyversions/django-simple-email.svg)](https://pypi.org/project/django-simple-email/)
+[![Django](https://img.shields.io/pypi/djversions/django-simple-email.svg)](https://pypi.org/project/django-simple-email/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+Edit your transactional email templates from the Django admin. No redeploy. No template files. Just open the admin, change the copy, and send a test to see it live.
 
-> A simple Django app for sending emails, providing an easy-to-use interface and reusable components.
+---
 
-## Table of Contents
+## The problem it solves
 
-- [Installation](#installation-)
-- [Configuration](#configuration-)
-- [Migrations](#migrations-)
-- [Running locally as a developer](#running-locally-as-a-developer-)
-  - [Tests](#tests-)
-  - [Linting](#linting-)
-  - [If using pyenv](#if-using-pyenv)
-- [Updating and publishing the library](#updating-and-publishing-the-library-)
-- [Use this project as a template](#use-this-project-as-a-template-for-your-own-django-library-)
+Normally, changing the text in a transactional email means editing a file, committing, pushing, and waiting for a deploy. With `django-simple-email`, templates live in the database. Anyone with admin access can edit them, and a **Preview** + **Send test** button lets you confirm the result before it ever reaches a real user.
 
-## Installation 📦
+---
 
-You can install the library using pip or poetry:
+## Install
 
 ```bash
 pip install django-simple-email
-# or
-poetry add django-simple-email
 ```
 
-
-## Configuration ⚙️
-
-Add `django_simple_email` to the `INSTALLED_APPS` list in your `settings.py`:
+Add to `INSTALLED_APPS`:
 
 ```python
 INSTALLED_APPS = [
-    # ... other apps ...
-    'django_simple_email',
+    # ...
+    "django_simple_email",
 ]
 ```
 
-
-## Migrations 🗄️
-
-After installing and configuring, run the following commands:
+Run migrations:
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
+That's it.
 
-🎉 Done! Your Django library is installed and ready to use.
+---
 
+## Core concepts
 
-## Running locally as a developer 🖥️
+### EmailLayout
 
-To run the Django project locally during development, follow the steps below:
+A layout is a reusable envelope: a **header** and a **footer** that wrap the content of multiple templates. Define your brand header once — logo, colors, top bar — and reuse it across every email.
+
+Layouts are optional. A template without a layout renders its body directly.
+
+### EmailTemplate
+
+A template is the email itself: subject, HTML body, and an optional plain-text fallback. Both `subject` and `html_body` support **Django template syntax**, so you can use `{{ variable }}`, `{% if %}`, `{% for %}`, and everything else Django templates offer.
+
+Each template stores a `sample_context` — a JSON object with example values. This is what **Preview** and **Send test** use, so you always have realistic data to work with.
+
+---
+
+## Sending email from code
+
+```python
+from django_simple_email.sending import send_email
+
+send_email(
+    template_name="welcome",
+    to=["user@example.com"],
+    context={"name": "Ana", "cta_url": "https://example.com/dashboard"},
+)
+```
+
+The `context` you pass is merged on top of the template's `sample_context`. Both `subject` and `html_body` are rendered as Django templates with the merged context before sending.
+
+`send_email` uses whatever `EMAIL_BACKEND` you have configured — no lock-in.
+
+---
+
+## Admin features
+
+### Templates list
+
+The templates list shows a **Preview HTML** link and a **Send test** button per row, so you can check any template without opening it.
+
+### Change page
+
+When editing a template, the **Metadata** section at the bottom has:
+
+- **Preview HTML** — opens the fully rendered email (layout + body) in a new tab
+- **Send test** — renders and sends the email to `DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT` immediately, showing a success or error message inline
+
+---
+
+## Settings
+
+| Setting | Default | Description |
+|---|---|---|
+| `DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT` | `"test@test.com"` | Address used by the admin test-send button |
+
+```python
+# settings.py
+DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT = "you@yourcompany.com"
+```
+
+---
+
+## Local development
+
+### Requirements
+
+- [Poetry](https://python-poetry.org/)
+- [Docker](https://docs.docker.com/get-docker/) — for Mailpit (local email catcher)
+
+### First-time setup
 
 ```bash
 git clone https://github.com/GustavoRizzo/django-simple-email.git
 cd django-simple-email
 poetry install
-poetry run task run-demo
+poetry run task setup          # migrate + create superuser
+poetry run task load-fixtures  # load sample layouts and templates
 ```
 
-For a more complete setup, you can run the comands:
+### Running
+
 ```bash
-poetry run task migrate
-poetry run task createsuperuser
-# or
-poetry run task setup  # that will do the same as above
+poetry run task mailpit    # Mailpit SMTP on :1025, web UI on :8025
+poetry run task run-demo   # Django on localhost:8000
 ```
 
+Go to [localhost:8000/admin](http://localhost:8000/admin) and log in with the superuser you created.
 
-### Tests 🧪
-To run the tests, use the command below inside the `demo_project` directory:
+The fixtures include a `default` layout and three templates (`welcome`, `password-reset`, `notification`), plus seasonal layout variants (Halloween, Christmas, New Year) with matching template variations — enough to explore the preview and test-send features right away.
+
+### Tests and linting
 
 ```bash
 poetry run task test
-```
-
-
-### Linting 🧹
-To check for linting issues, use the command below:
-
-```bash
 poetry run task lint
-poetry run task lint-fix  # to fix issues automatically
+poetry run task lint-fix
 ```
 
-## If using pyenv
-To manage Python versions, you can use `pyenv`. To install `pyenv`, follow the instructions in the [pyenv GitHub repository](https://github.com/pyenv/pyenv).
-```bash
-pyenv update
-pyenv install 3.12.0
-# Activete the virtual environment with the correct Python version
-python -m venv venv
-source venv/bin/activate
-pip install pip --upgrade
-pip install poetry
-poetry install
-poetry run task run-demo
-```
-
-
-## Updating and publishing the library 🚢
-
-To update the version, build, and publish your library, use the commands below:
+### Releasing
 
 ```bash
-poetry version patch  # to bump the version (e.g.: 0.1.0 → 0.1.1)
+poetry version patch   # 0.1.0 → 0.1.1
 poetry build
-tar -tzf dist/*.tar.gz | head -20  # to see the files inside the package
 poetry publish
 ```
-
-# Use this project as a template for your own Django library! 🌟
-
-## Creating a new library from this template
-
-This template is designed to be adapted by an AI assistant in seconds. Follow the steps below.
-
-### 1. Fork the repository
-
-On GitHub, click **"Use this template"** → **"Create a new repository"** and give it a name (e.g., `django-awesome-lib`).
-
-### 2. Clone your new repository
-
-```bash
-git clone https://github.com/YOUR_USER/django-awesome-lib.git
-cd django-awesome-lib
-```
-
-### 3. Open it in your editor with an AI assistant
-
-Open the project in VS Code, Cursor, or any editor with Claude Code (or a similar AI assistant) available.
-
-### 4. Update template.config.json
-
-Open `template.config.json` and fill in your new project's values:
-
-```json
-{
-  "project_name": "django-awesome-lib",
-  "package_name": "django_awesome_lib",
-  "app_class_name": "DjangoAwesomeLib",
-  "description": "A description of what your library does.",
-  "author_name": "Your Name",
-  "author_email": "your@email.com",
-  "github_url": "https://github.com/YOUR_USER/django-awesome-lib",
-  "pypi_url": "https://pypi.org/project/django-awesome-lib/",
-  "version": "0.1.0"
-}
-```
-
-### 5. Send this prompt to the AI
-
-Copy and paste the prompt below into the AI assistant chat:
-
-```
-Read the template.config.json file and use it to adapt this project to the new library.
-Propagate all changes across every file in the project: rename folders, update all references
-to the old package name, description, URLs, and author info. After that, run the tests and
-linter to confirm everything is working.
-```
-
-The AI will handle all renames and references automatically. Done! 🎉
