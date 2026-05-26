@@ -1,7 +1,7 @@
 [project]
 name = "django-simple-email"
 version = "0.1.0"
-description = "A simple Django app for sending emails, providing an easy-to-use interface and reusable components."
+description = "Manage transactional email templates from the Django admin — editable layouts, preview, and test send without deploys."
 authors = [
     {name = "Gustavo Rizzo S M de Albuquerque",email = "grizzo.albu@gmail.com"}
 ]
@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [tool.poetry]
+exclude = ["django_simple_email/tests", "django_simple_email/fixtures"]
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^2.1.0"

@@ -1,5 +1,7 @@
 from django.db import models
 
+from .validation import validate_template_syntax
+
 
 class EmailLayout(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -13,6 +15,9 @@ class EmailLayout(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        validate_template_syntax({"header_html": self.header_html, "footer_html": self.footer_html})
 
 
 class EmailTemplate(models.Model):
@@ -37,3 +42,6 @@ class EmailTemplate(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        validate_template_syntax({"subject": self.subject, "html_body": self.html_body, "text_body": self.text_body})
