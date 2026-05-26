@@ -122,9 +122,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-URL_PYPI = 'https://pypi.org/project/django-simple-email/'
-URL_GITHUB = 'https://github.com/GustavoRizzo/django-simple-email'
-
 # Email — points to Mailpit in dev (docker/compose.yml)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'localhost'
