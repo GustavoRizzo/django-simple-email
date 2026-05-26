@@ -1,0 +1,95 @@
+[
+  {
+    "model": "django_simple_email.emaillayout",
+    "pk": 2,
+    "fields": {
+      "name": "halloween",
+      "header_html": "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#0d0d0d;padding:32px 0\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#fff8f0;border-radius:8px;overflow:hidden;border-top:4px solid #ff6600\"><tr><td style=\"background:#1a0800;padding:28px 32px\"><h1 style=\"margin:0;color:#ff6600;font-family:Georgia,serif;font-size:22px;letter-spacing:2px\">{{ company_name }}</h1><p style=\"margin:6px 0 0;color:#ff9933;font-family:Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase\">Halloween Special</p></td></tr><tr><td style=\"padding:32px;background:#fff8f0\">",
+      "footer_html": "</td></tr><tr><td style=\"background:#1a0800;padding:20px 32px;border-top:2px solid #ff6600\"><p style=\"margin:0;color:#ff9933;font-family:Arial,sans-serif;font-size:12px;text-align:center\">© {{ company_name }} &nbsp;·&nbsp; <a href=\"{{ unsubscribe_url }}\" style=\"color:#ff6600;text-decoration:none\">Descadastrar</a></p></td></tr></table></td></tr></table>",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emaillayout",
+    "pk": 3,
+    "fields": {
+      "name": "christmas",
+      "header_html": "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#0f2d0f;padding:32px 0\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;border-top:4px solid #c0392b\"><tr><td style=\"background:#c0392b;padding:28px 32px\"><h1 style=\"margin:0;color:#ffffff;font-family:Georgia,serif;font-size:22px;letter-spacing:1px\">{{ company_name }}</h1><p style=\"margin:6px 0 0;color:#f9d342;font-family:Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase\">Feliz Natal</p></td></tr><tr><td style=\"padding:32px\">",
+      "footer_html": "</td></tr><tr><td style=\"background:#1e6b2e;padding:20px 32px\"><p style=\"margin:0;color:#a8d8a8;font-family:Arial,sans-serif;font-size:12px;text-align:center\">© {{ company_name }} &nbsp;·&nbsp; <a href=\"{{ unsubscribe_url }}\" style=\"color:#ffffff;text-decoration:none\">Descadastrar</a></p></td></tr></table></td></tr></table>",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emaillayout",
+    "pk": 4,
+    "fields": {
+      "name": "new-year",
+      "header_html": "<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#0a0a14;padding:32px 0\"><tr><td align=\"center\"><table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;border-top:4px solid #ffd700\"><tr><td style=\"background:#0a0a14;padding:28px 32px\"><h1 style=\"margin:0;color:#ffd700;font-family:Georgia,serif;font-size:22px;letter-spacing:2px\">{{ company_name }}</h1><p style=\"margin:6px 0 0;color:#c0c0c0;font-family:Arial,sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase\">Feliz Ano Novo</p></td></tr><tr><td style=\"padding:32px\">",
+      "footer_html": "</td></tr><tr><td style=\"background:#0a0a14;padding:20px 32px;border-top:1px solid #ffd700\"><p style=\"margin:0;color:#888888;font-family:Arial,sans-serif;font-size:12px;text-align:center\">© {{ company_name }} &nbsp;·&nbsp; <a href=\"{{ unsubscribe_url }}\" style=\"color:#ffd700;text-decoration:none\">Descadastrar</a></p></td></tr></table></td></tr></table>",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 4,
+    "fields": {
+      "name": "welcome-halloween",
+      "description": "Boas-vindas com layout de Halloween",
+      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#ff6600;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
+      "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
+      "layout": 2,
+      "sample_context": {
+        "name": "Ana Silva",
+        "company_name": "Minha Empresa",
+        "cta_url": "https://example.com/dashboard",
+        "unsubscribe_url": "https://example.com/unsubscribe"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 5,
+    "fields": {
+      "name": "welcome-christmas",
+      "description": "Boas-vindas com layout de Natal",
+      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#c0392b;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
+      "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
+      "layout": 3,
+      "sample_context": {
+        "name": "Ana Silva",
+        "company_name": "Minha Empresa",
+        "cta_url": "https://example.com/dashboard",
+        "unsubscribe_url": "https://example.com/unsubscribe"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 6,
+    "fields": {
+      "name": "welcome-new-year",
+      "description": "Boas-vindas com layout de Ano Novo",
+      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#ffd700;color:#0a0a14;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
+      "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
+      "layout": 4,
+      "sample_context": {
+        "name": "Ana Silva",
+        "company_name": "Minha Empresa",
+        "cta_url": "https://example.com/dashboard",
+        "unsubscribe_url": "https://example.com/unsubscribe"
+      },
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]
