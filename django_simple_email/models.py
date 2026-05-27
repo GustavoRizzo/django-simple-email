@@ -24,7 +24,12 @@ class EmailLayout(models.Model):
     def clean(self):
         validate_template_syntax({"header_html": self.header_html, "footer_html": self.footer_html})
 
-    _PREVIEW_PLACEHOLDER = "<div style='padding:20px;font-family:sans-serif'><p>Your email content will appear here.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>"
+    _PREVIEW_PLACEHOLDER = (
+        "<div style='padding:20px;font-family:sans-serif'>"
+        "<p>Your email content will appear here.</p>"
+        "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+        "</div>"
+    )
 
     def preview_render(self, context: dict | None = None) -> str:
         ctx = context or {}

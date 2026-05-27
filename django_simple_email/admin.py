@@ -1,12 +1,11 @@
 from django.conf import settings
 from django.contrib import admin, messages
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse
 from django.utils.html import format_html
-
-from django.core.mail import EmailMultiAlternatives
 
 from .models import EmailLayout, EmailTemplate
 from .sending import send_email
