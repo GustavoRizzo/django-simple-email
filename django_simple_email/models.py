@@ -1,6 +1,11 @@
 from django.db import models
+from django.template import Context, Template
 
 from .validation import validate_template_syntax
+
+
+def _render_part(source: str, context: dict) -> str:
+    return Template(source).render(Context(context))
 
 
 class EmailLayout(models.Model):
@@ -45,3 +50,18 @@ class EmailTemplate(models.Model):
 
     def clean(self):
         validate_template_syntax({"subject": self.subject, "html_body": self.html_body, "text_body": self.text_body})
+
+    def render(self, context: dict | None = None) -> tuple[str, str, str]:
+        """Returns (subject, html, text) with Django template syntax resolved."""
+        ctx = {**self.sample_context, **(context or {})}
+
+        subject = _render_part(self.subject, ctx)
+        html = _render_part(self.html_body, ctx)
+        text = _render_part(self.text_body, ctx) if self.text_body else ""
+
+        if self.layout:
+            header = _render_part(self.layout.header_html, ctx)
+            footer = _render_part(self.layout.footer_html, ctx)
+            html = header + html + footer
+
+        return subject, html, text

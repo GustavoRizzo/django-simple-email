@@ -7,7 +7,6 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .models import EmailLayout, EmailTemplate
-from .rendering import render_template
 from .sending import send_email
 from .widgets import CodeTextarea
 
@@ -53,7 +52,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
     def _preview_view(self, request, pk):
         template = get_object_or_404(EmailTemplate, pk=pk)
-        _, html, _ = render_template(template)
+        _, html, _ = template.render()
         return HttpResponse(html)
 
     def _send_test_view(self, request, pk):

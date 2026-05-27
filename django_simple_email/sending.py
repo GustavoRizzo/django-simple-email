@@ -1,7 +1,6 @@
 from django.core.mail import EmailMultiAlternatives
 
 from .models import EmailTemplate
-from .rendering import render_template
 
 
 def send_email(
@@ -12,7 +11,7 @@ def send_email(
 ) -> int:
     """Sends an email using a stored EmailTemplate. Returns number of messages sent."""
     template = EmailTemplate.objects.get(name=template_name)
-    subject, html, text = render_template(template, context)
+    subject, html, text = template.render(context)
 
     msg = EmailMultiAlternatives(
         subject=subject,

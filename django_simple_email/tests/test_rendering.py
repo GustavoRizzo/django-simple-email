@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from django_simple_email.models import EmailLayout, EmailTemplate
-from django_simple_email.rendering import render_template
 
 
 def make_template(**kwargs) -> EmailTemplate:
@@ -24,11 +23,11 @@ def make_layout(**kwargs) -> EmailLayout:
 
 class SubjectRenderingTests(TestCase):
     def test_renders_subject_variables(self):
-        subject, _, _ = render_template(make_template())
+        subject, _, _ = make_template().render()
         self.assertEqual(subject, "Hello World")
 
     def test_subject_uses_passed_context(self):
-        subject, _, _ = render_template(make_template(), context={"name": "Ana"})
+        subject, _, _ = make_template().render(context={"name": "Ana"})
         self.assertEqual(subject, "Hello Ana")
 
     def test_passed_context_merges_with_sample_context(self):
@@ -36,24 +35,24 @@ class SubjectRenderingTests(TestCase):
             subject="{{ greeting }}, {{ name }}!",
             sample_context={"greeting": "Olá", "name": "World"},
         )
-        subject, _, _ = render_template(template, context={"name": "Ana"})
+        subject, _, _ = template.render(context={"name": "Ana"})
         self.assertEqual(subject, "Olá, Ana!")
 
 
 class HtmlBodyRenderingTests(TestCase):
     def test_renders_html_variables(self):
-        _, html, _ = render_template(make_template())
+        _, html, _ = make_template().render()
         self.assertEqual(html, "<p>Hi World</p>")
 
     def test_template_without_layout_renders_body_only(self):
         template = make_template(html_body="<p>standalone</p>", sample_context={})
-        _, html, _ = render_template(template)
+        _, html, _ = template.render()
         self.assertEqual(html, "<p>standalone</p>")
 
     def test_layout_header_and_footer_wrap_body(self):
         layout = make_layout(header_html="<HEADER>", footer_html="<FOOTER>")
         template = make_template(html_body="<BODY>", layout=layout, sample_context={})
-        _, html, _ = render_template(template)
+        _, html, _ = template.render()
         self.assertEqual(html, "<HEADER><BODY><FOOTER>")
 
     def test_layout_variables_are_rendered_with_context(self):
@@ -62,15 +61,15 @@ class HtmlBodyRenderingTests(TestCase):
             footer_html="<footer>{{ company }}</footer>",
         )
         template = make_template(html_body="<p>body</p>", layout=layout, sample_context={"company": "Acme"})
-        _, html, _ = render_template(template)
+        _, html, _ = template.render()
         self.assertEqual(html, "<h1>Acme</h1><p>body</p><footer>Acme</footer>")
 
 
 class TextBodyRenderingTests(TestCase):
     def test_renders_text_variables(self):
-        _, _, text = render_template(make_template())
+        _, _, text = make_template().render()
         self.assertEqual(text, "Hi World")
 
     def test_empty_text_body_returns_empty_string(self):
-        _, _, text = render_template(make_template(text_body=""))
+        _, _, text = make_template(text_body="").render()
         self.assertEqual(text, "")
