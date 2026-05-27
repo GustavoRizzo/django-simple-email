@@ -8,6 +8,8 @@ from django_simple_email.models import EmailLayout, EmailTemplate
 LOCMEM = "django.core.mail.backends.locmem.EmailBackend"
 PREVIEW_URL = "admin:django_simple_email_emailtemplate_preview"
 SEND_TEST_URL = "admin:django_simple_email_emailtemplate_send_test"
+LAYOUT_PREVIEW_URL = "admin:django_simple_email_emaillayout_preview"
+LAYOUT_SEND_TEST_URL = "admin:django_simple_email_emaillayout_send_test"
 
 
 class AdminTestCase(TestCase):
@@ -86,6 +88,76 @@ class SendTestViewTests(AdminTestCase):
         url = reverse(SEND_TEST_URL, args=[99999])
         response = self.client.get(url, HTTP_REFERER="/admin/")
         self.assertEqual(response.status_code, 404)
+
+
+class LayoutPreviewViewTests(AdminTestCase):
+    def test_returns_200(self):
+        url = reverse(LAYOUT_PREVIEW_URL, args=[self.layout.pk])
+        self.assertEqual(self.client.get(url).status_code, 200)
+
+    def test_renders_header_and_footer(self):
+        url = reverse(LAYOUT_PREVIEW_URL, args=[self.layout.pk])
+        content = self.client.get(url).content.decode()
+        self.assertIn("<HEADER>", content)
+        self.assertIn("<FOOTER>", content)
+
+    def test_renders_placeholder_body(self):
+        url = reverse(LAYOUT_PREVIEW_URL, args=[self.layout.pk])
+        content = self.client.get(url).content.decode()
+        self.assertIn("Your email content will appear here.", content)
+
+    def test_returns_404_for_missing_layout(self):
+        url = reverse(LAYOUT_PREVIEW_URL, args=[99999])
+        self.assertEqual(self.client.get(url).status_code, 404)
+
+
+class LayoutSendTestViewTests(AdminTestCase):
+    def setUp(self):
+        super().setUp()
+        mail.outbox = []
+
+    @override_settings(EMAIL_BACKEND=LOCMEM)
+    def test_sends_one_email(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        self.client.get(url, HTTP_REFERER="/admin/")
+        self.assertEqual(len(mail.outbox), 1)
+
+    @override_settings(EMAIL_BACKEND=LOCMEM, DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT="custom@example.com")
+    def test_uses_configured_test_recipient(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        self.client.get(url, HTTP_REFERER="/admin/")
+        self.assertEqual(mail.outbox[0].to, ["custom@example.com"])
+
+    @override_settings(EMAIL_BACKEND=LOCMEM)
+    def test_default_recipient_is_test_at_test_dot_com(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        self.client.get(url, HTTP_REFERER="/admin/")
+        self.assertEqual(mail.outbox[0].to, ["test@test.com"])
+
+    @override_settings(EMAIL_BACKEND=LOCMEM)
+    def test_subject_contains_layout_name(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        self.client.get(url, HTTP_REFERER="/admin/")
+        self.assertIn(self.layout.name, mail.outbox[0].subject)
+
+    @override_settings(EMAIL_BACKEND=LOCMEM)
+    def test_html_alternative_contains_header_and_footer(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        self.client.get(url, HTTP_REFERER="/admin/")
+        content, mimetype = mail.outbox[0].alternatives[0]
+        self.assertEqual(mimetype, "text/html")
+        self.assertIn("<HEADER>", content)
+        self.assertIn("<FOOTER>", content)
+
+    @override_settings(EMAIL_BACKEND=LOCMEM)
+    def test_redirects_back_to_referer(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[self.layout.pk])
+        response = self.client.get(url, HTTP_REFERER="/admin/django_simple_email/emaillayout/")
+        self.assertRedirects(response, "/admin/django_simple_email/emaillayout/", fetch_redirect_response=False)
+
+    def test_returns_404_for_missing_layout(self):
+        url = reverse(LAYOUT_SEND_TEST_URL, args=[99999])
+        self.assertEqual(self.client.get(url, HTTP_REFERER="/admin/").status_code, 404)
 
 
 class AdminPagesTests(AdminTestCase):

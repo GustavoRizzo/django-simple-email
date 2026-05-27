@@ -73,3 +73,36 @@ class TextBodyRenderingTests(TestCase):
     def test_empty_text_body_returns_empty_string(self):
         _, _, text = make_template(text_body="").render()
         self.assertEqual(text, "")
+
+
+class LayoutPreviewRenderTests(TestCase):
+    def test_includes_header_and_footer(self):
+        layout = make_layout(header_html="<HEADER>", footer_html="<FOOTER>")
+        html = layout.preview_render()
+        self.assertIn("<HEADER>", html)
+        self.assertIn("<FOOTER>", html)
+
+    def test_placeholder_is_between_header_and_footer(self):
+        layout = make_layout(header_html="<HEADER>", footer_html="<FOOTER>")
+        html = layout.preview_render()
+        header_pos = html.index("<HEADER>")
+        footer_pos = html.index("<FOOTER>")
+        placeholder_pos = html.index("Your email content will appear here.")
+        self.assertLess(header_pos, placeholder_pos)
+        self.assertLess(placeholder_pos, footer_pos)
+
+    def test_variables_are_resolved_with_context(self):
+        layout = make_layout(header_html="<h1>{{ company }}</h1>", footer_html="<footer>{{ company }}</footer>")
+        html = layout.preview_render(context={"company": "Acme"})
+        self.assertIn("<h1>Acme</h1>", html)
+        self.assertIn("<footer>Acme</footer>", html)
+        self.assertNotIn("{{ company }}", html)
+
+    def test_empty_header_and_footer_renders_only_placeholder(self):
+        layout = make_layout(header_html="", footer_html="")
+        html = layout.preview_render()
+        self.assertIn("Your email content will appear here.", html)
+
+    def test_returns_string(self):
+        layout = make_layout()
+        self.assertIsInstance(layout.preview_render(), str)
