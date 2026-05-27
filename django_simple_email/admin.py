@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin, messages
+from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse
@@ -8,6 +9,7 @@ from django.utils.html import format_html
 from .models import EmailLayout, EmailTemplate
 from .rendering import render_template
 from .sending import send_email
+from .widgets import CodeTextarea
 
 _DEFAULT_TEST_RECIPIENT = "test@test.com"
 
@@ -17,6 +19,7 @@ class EmailLayoutAdmin(admin.ModelAdmin):
     list_display = ["name", "created_at", "updated_at"]
     search_fields = ["name"]
     readonly_fields = ["created_at", "updated_at"]
+    formfield_overrides = {models.TextField: {"widget": CodeTextarea}}
 
 
 @admin.register(EmailTemplate)
@@ -25,6 +28,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     list_select_related = ["layout"]
     search_fields = ["name", "description", "subject"]
     readonly_fields = ["preview_link", "send_test_link", "created_at", "updated_at"]
+    formfield_overrides = {models.TextField: {"widget": CodeTextarea}}
     fieldsets = [
         (None, {"fields": ["name", "description", "layout", "sample_context"]}),
         ("Content", {"fields": ["subject", "html_body", "text_body"]}),
