@@ -51,4 +51,5 @@ lint-fix = { cmd = "ruff check . --fix", help = "runs the linter and tries to fi
 test = { cmd = "{V_DEMO_FOLDER} python manage.py test django_simple_email kernel", help = "runs the test suite" }
 run-demo = { cmd = "{V_DEMO_FOLDER} python manage.py runserver", help = "runs the demo project server" }
 mailpit = { cmd = "docker compose -f docker/compose.yml up -d", help = "starts Mailpit SMTP catcher (UI at http://localhost:8025)" }
+mailpit-stop = { cmd = "docker compose -f docker/compose.yml down", help = "stops Mailpit" }
 load-fixtures = { cmd = "{V_DEMO_FOLDER} python manage.py loaddata sample_data seasonal_data", help = "loads sample and seasonal EmailLayout + EmailTemplate fixtures" }

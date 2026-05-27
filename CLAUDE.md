@@ -75,6 +75,7 @@ All commands are run with `poetry run task <name>` from the project root:
 | Command | Description |
 |---|---|
 | `task mailpit` | Start Mailpit SMTP catcher (UI at localhost:8025) |
+| `task mailpit-stop` | Stop Mailpit |
 | `task run-demo` | Run the demo project server at localhost:8000 |
 | `task migrate` | Apply database migrations |
 | `task setup` | Migrate + create superuser |
@@ -92,8 +93,8 @@ All commands are run with `poetry run task <name>` from the project root:
 ## Demo Setup (first time)
 
 ```bash
-docker compose -f docker/compose.yml up -d   # start Mailpit
 poetry install
+poetry run task mailpit         # start Mailpit (SMTP on :1025, UI on :8025)
 poetry run task setup           # migrate + create superuser (admin/admin)
 poetry run task load-fixtures   # load sample templates and layouts
 poetry run task run-demo        # http://localhost:8000/admin
