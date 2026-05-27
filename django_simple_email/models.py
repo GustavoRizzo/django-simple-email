@@ -24,6 +24,14 @@ class EmailLayout(models.Model):
     def clean(self):
         validate_template_syntax({"header_html": self.header_html, "footer_html": self.footer_html})
 
+    _PREVIEW_PLACEHOLDER = "<div style='padding:20px;font-family:sans-serif'><p>Your email content will appear here.</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>"
+
+    def preview_render(self, context: dict | None = None) -> str:
+        ctx = context or {}
+        header = _render_part(self.header_html, ctx)
+        footer = _render_part(self.footer_html, ctx)
+        return header + self._PREVIEW_PLACEHOLDER + footer
+
 
 class EmailTemplate(models.Model):
     name = models.SlugField(max_length=100, unique=True)
