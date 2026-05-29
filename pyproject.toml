@@ -1,6 +1,6 @@
 [project]
 name = "django-simple-email"
-version = "0.1.1"
+version = "0.1.2"
 description = "Manage transactional email templates from the Django admin — editable layouts, preview, and test send without deploys."
 authors = [
     {name = "Gustavo Rizzo S M de Albuquerque",email = "grizzo.albu@gmail.com"}
