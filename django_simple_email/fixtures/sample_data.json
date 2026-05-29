@@ -16,7 +16,7 @@
     "fields": {
       "name": "welcome",
       "description": "Enviado quando um novo usuário se cadastra",
-      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "subject_default": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
       "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#1a1a2e;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
       "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
       "layout": 1,
@@ -36,7 +36,7 @@
     "fields": {
       "name": "password-reset",
       "description": "Enviado quando o usuário solicita redefinição de senha",
-      "subject": "Redefinição de senha — {{ company_name }}",
+      "subject_default": "Redefinição de senha — {{ company_name }}",
       "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Recebemos uma solicitação para redefinir a senha da sua conta. Clique no botão abaixo para criar uma nova senha:</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ reset_url }}\" style=\"background:#d62828;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Redefinir senha</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#888888;margin:24px 0 8px\">Este link expira em <strong>{{ expiry_hours }} horas</strong>.</p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:0\">Se você não solicitou a redefinição, ignore este email. Sua senha permanece a mesma.</p>",
       "text_body": "Olá, {{ name }}!\n\nRecebemos uma solicitação para redefinir sua senha.\n\nAcesse: {{ reset_url }}\n\nEste link expira em {{ expiry_hours }} horas.\n\nSe não foi você, ignore este email.\n\n—\n{{ company_name }}",
       "layout": 1,
@@ -57,7 +57,7 @@
     "fields": {
       "name": "notification",
       "description": "Notificação genérica sem layout (só o corpo)",
-      "subject": "[{{ company_name }}] {{ title }}",
+      "subject_default": "[{{ company_name }}] {{ title }}",
       "html_body": "<!DOCTYPE html><html><body style=\"font-family:Arial,sans-serif;color:#333333;max-width:600px;margin:40px auto;padding:0 20px\"><h2 style=\"color:#1a1a2e\">{{ title }}</h2><p style=\"font-size:15px;line-height:1.7;color:#555555\">{{ message }}</p><hr style=\"border:none;border-top:1px solid #eeeeee;margin:24px 0\"><p style=\"font-size:12px;color:#aaaaaa\">{{ company_name }}</p></body></html>",
       "text_body": "{{ title }}\n\n{{ message }}\n\n—\n{{ company_name }}",
       "layout": null,

@@ -86,12 +86,12 @@ class EmailLayoutAdmin(admin.ModelAdmin):
 class EmailTemplateAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "layout", "updated_at", "preview_link", "send_test_link"]
     list_select_related = ["layout"]
-    search_fields = ["name", "description", "subject"]
+    search_fields = ["name", "description", "subject_default"]
     readonly_fields = ["preview_link", "send_test_link", "created_at", "updated_at"]
     formfield_overrides = {models.TextField: {"widget": CodeTextarea}}
     fieldsets = [
         (None, {"fields": ["name", "description", "layout", "sample_context"]}),
-        ("Content", {"fields": ["subject", "html_body", "text_body"]}),
+        ("Content", {"fields": ["subject_default", "html_body", "text_body"]}),
         ("Metadata", {"fields": ["preview_link", "send_test_link", "created_at", "updated_at"]}),
     ]
 
@@ -120,7 +120,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         template = get_object_or_404(EmailTemplate, pk=pk)
         recipient = getattr(settings, "DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT", _DEFAULT_TEST_RECIPIENT)
         try:
-            send_email(template.name, to=[recipient])
+            send_email(template.name, recipient_list=[recipient])
             self.message_user(request, f'Email "{template.name}" enviado para {recipient}.', messages.SUCCESS)
         except Exception as e:
             self.message_user(request, f"Erro ao enviar: {e}", messages.ERROR)

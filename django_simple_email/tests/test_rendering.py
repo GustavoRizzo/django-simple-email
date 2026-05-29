@@ -6,7 +6,7 @@ from django_simple_email.models import EmailLayout, EmailTemplate
 def make_template(**kwargs) -> EmailTemplate:
     defaults = {
         "name": "test",
-        "subject": "Hello {{ name }}",
+        "subject_default": "Hello {{ name }}",
         "html_body": "<p>Hi {{ name }}</p>",
         "text_body": "Hi {{ name }}",
         "sample_context": {"name": "World"},
@@ -32,7 +32,7 @@ class SubjectRenderingTests(TestCase):
 
     def test_passed_context_merges_with_sample_context(self):
         template = make_template(
-            subject="{{ greeting }}, {{ name }}!",
+            subject_default="{{ greeting }}, {{ name }}!",
             sample_context={"greeting": "Olá", "name": "World"},
         )
         subject, _, _ = template.render(context={"name": "Ana"})

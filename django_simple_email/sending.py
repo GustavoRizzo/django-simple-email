@@ -5,18 +5,19 @@ from .models import EmailTemplate
 
 def send_email(
     template_name: str,
-    to: list[str],
+    recipient_list: list[str],
     context: dict | None = None,
+    subject: str | None = None,
     from_email: str | None = None,
 ) -> int:
     """Sends an email using a stored EmailTemplate. Returns number of messages sent."""
     template = EmailTemplate.objects.get(name=template_name)
-    subject, html, text = template.render(context)
+    default_subject, html, text = template.render(context)
 
     msg = EmailMultiAlternatives(
-        subject=subject,
+        subject=subject if subject is not None else default_subject,
         body=text or html,
-        to=to,
+        to=recipient_list,
         from_email=from_email,
     )
     if html:

@@ -23,7 +23,7 @@ class AdminTestCase(TestCase):
         )
         self.template = EmailTemplate.objects.create(
             name="test",
-            subject="Hello {{ name }}",
+            subject_default="Hello {{ name }}",
             html_body="<p>Hi {{ name }}</p>",
             layout=self.layout,
             sample_context={"name": "World"},

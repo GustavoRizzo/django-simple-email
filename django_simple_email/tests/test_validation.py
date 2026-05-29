@@ -28,7 +28,7 @@ class EmailLayoutValidationTests(TestCase):
 
 class EmailTemplateValidationTests(TestCase):
     def _valid_template(self, **kwargs):
-        defaults = {"name": "test", "subject": "Hi {{ name }}", "html_body": "<p>{{ name }}</p>"}
+        defaults = {"name": "test", "subject_default": "Hi {{ name }}", "html_body": "<p>{{ name }}</p>"}
         defaults.update(kwargs)
         return EmailTemplate(**defaults)
 
@@ -36,10 +36,10 @@ class EmailTemplateValidationTests(TestCase):
         self._valid_template().full_clean()
 
     def test_invalid_subject_syntax_raises(self):
-        t = self._valid_template(subject="{% if %}")
+        t = self._valid_template(subject_default="{% if %}")
         with self.assertRaises(ValidationError) as ctx:
             t.full_clean()
-        self.assertIn("subject", ctx.exception.message_dict)
+        self.assertIn("subject_default", ctx.exception.message_dict)
 
     def test_invalid_html_body_syntax_raises(self):
         t = self._valid_template(html_body="{% for x %}")
@@ -54,8 +54,8 @@ class EmailTemplateValidationTests(TestCase):
         self.assertIn("text_body", ctx.exception.message_dict)
 
     def test_multiple_invalid_fields_reported_together(self):
-        t = self._valid_template(subject="{% if %}", html_body="{% for x %}")
+        t = self._valid_template(subject_default="{% if %}", html_body="{% for x %}")
         with self.assertRaises(ValidationError) as ctx:
             t.full_clean()
-        self.assertIn("subject", ctx.exception.message_dict)
+        self.assertIn("subject_default", ctx.exception.message_dict)
         self.assertIn("html_body", ctx.exception.message_dict)

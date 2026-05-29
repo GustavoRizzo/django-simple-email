@@ -38,7 +38,7 @@
     "fields": {
       "name": "welcome-halloween",
       "description": "Boas-vindas com layout de Halloween",
-      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "subject_default": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
       "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#ff6600;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
       "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
       "layout": 2,
@@ -58,7 +58,7 @@
     "fields": {
       "name": "welcome-christmas",
       "description": "Boas-vindas com layout de Natal",
-      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "subject_default": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
       "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#c0392b;color:#ffffff;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
       "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
       "layout": 3,
@@ -78,7 +78,7 @@
     "fields": {
       "name": "welcome-new-year",
       "description": "Boas-vindas com layout de Ano Novo",
-      "subject": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
+      "subject_default": "Bem-vindo(a) ao {{ company_name }}, {{ name }}!",
       "html_body": "<p style=\"font-family:Arial,sans-serif;font-size:16px;color:#333333;margin:0 0 16px\">Olá, <strong>{{ name }}</strong>!</p><p style=\"font-family:Arial,sans-serif;font-size:15px;color:#555555;line-height:1.7;margin:0 0 24px\">Sua conta foi criada com sucesso. Clique no botão abaixo para acessar a plataforma.</p><p style=\"text-align:center;margin:32px 0\"><a href=\"{{ cta_url }}\" style=\"background:#ffd700;color:#0a0a14;font-family:Arial,sans-serif;font-size:15px;text-decoration:none;padding:14px 32px;border-radius:6px;display:inline-block\">Acessar minha conta</a></p><p style=\"font-family:Arial,sans-serif;font-size:13px;color:#aaaaaa;margin:24px 0 0\">Se você não criou uma conta, pode ignorar este email.</p>",
       "text_body": "Olá, {{ name }}!\n\nSua conta foi criada com sucesso.\n\nAcesse: {{ cta_url }}\n\n—\n{{ company_name }}",
       "layout": 4,

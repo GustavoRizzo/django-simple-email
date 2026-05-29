@@ -41,7 +41,7 @@ class EmailLayout(models.Model):
 class EmailTemplate(models.Model):
     name = models.SlugField(max_length=100, unique=True)
     description = models.CharField(max_length=255, blank=True)
-    subject = models.CharField(max_length=255)
+    subject_default = models.CharField(max_length=255)
     html_body = models.TextField()
     text_body = models.TextField(blank=True)
     layout = models.ForeignKey(
@@ -62,13 +62,13 @@ class EmailTemplate(models.Model):
         return self.name
 
     def clean(self):
-        validate_template_syntax({"subject": self.subject, "html_body": self.html_body, "text_body": self.text_body})
+        validate_template_syntax({"subject_default": self.subject_default, "html_body": self.html_body, "text_body": self.text_body})
 
     def render(self, context: dict | None = None) -> tuple[str, str, str]:
         """Returns (subject, html, text) with Django template syntax resolved."""
         ctx = {**self.sample_context, **(context or {})}
 
-        subject = _render_part(self.subject, ctx)
+        subject = _render_part(self.subject_default, ctx)
         html = _render_part(self.html_body, ctx)
         text = _render_part(self.text_body, ctx) if self.text_body else ""
 
