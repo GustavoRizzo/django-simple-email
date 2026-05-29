@@ -3,7 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from .models import EmailTemplate
 
 
-def send_email(
+def send_template_mail(
     template_name: str,
     recipient_list: list[str],
     context: dict | None = None,

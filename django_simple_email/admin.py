@@ -8,7 +8,7 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .models import EmailLayout, EmailTemplate
-from .sending import send_email
+from .sending import send_template_mail
 from .widgets import CodeTextarea
 
 _DEFAULT_TEST_RECIPIENT = "test@test.com"
@@ -120,7 +120,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         template = get_object_or_404(EmailTemplate, pk=pk)
         recipient = getattr(settings, "DJANGO_SIMPLE_EMAIL_TEST_RECIPIENT", _DEFAULT_TEST_RECIPIENT)
         try:
-            send_email(template.name, recipient_list=[recipient])
+            send_template_mail(template.name, recipient_list=[recipient])
             self.message_user(request, f'Email "{template.name}" enviado para {recipient}.', messages.SUCCESS)
         except Exception as e:
             self.message_user(request, f"Erro ao enviar: {e}", messages.ERROR)

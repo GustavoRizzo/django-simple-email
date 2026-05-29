@@ -64,6 +64,17 @@ class EmailTemplate(models.Model):
     def clean(self):
         validate_template_syntax({"subject_default": self.subject_default, "html_body": self.html_body, "text_body": self.text_body})
 
+    def send_email(
+        self,
+        recipient_list: list[str],
+        context: dict | None = None,
+        subject: str | None = None,
+        from_email: str | None = None,
+    ) -> int:
+        from .sending import send_template_mail
+
+        return send_template_mail(self.name, recipient_list, context=context, subject=subject, from_email=from_email)
+
     def render(self, context: dict | None = None) -> tuple[str, str, str]:
         """Returns (subject, html, text) with Django template syntax resolved."""
         ctx = {**self.sample_context, **(context or {})}
