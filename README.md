@@ -59,18 +59,18 @@ Each template stores a `sample_context` — a JSON object with example values. T
 ## Sending email from code
 
 ```python
-from django_simple_email.sending import send_email
+from django_simple_email.sending import send_template_mail
 
-send_email(
+send_template_mail(
     template_name="welcome",
-    to=["user@example.com"],
+    recipient_list=["user@example.com"],
     context={"name": "Ana", "cta_url": "https://example.com/dashboard"},
 )
 ```
 
-The `context` you pass is merged on top of the template's `sample_context`. Both `subject` and `html_body` are rendered as Django templates with the merged context before sending.
+The `context` you pass is merged on top of the template's `sample_context`. Both `subject_default` and `html_body` are rendered as Django templates with the merged context before sending.
 
-`send_email` uses whatever `EMAIL_BACKEND` you have configured — no lock-in.
+`send_template_mail` uses whatever `EMAIL_BACKEND` you have configured — no lock-in. This means it integrates natively with [django-anymail](https://anymail.dev): just install anymail, set your `EMAIL_BACKEND`, and all emails sent through this library will go through your chosen ESP (Mailgun, SendGrid, Postmark, Amazon SES, etc.) without any extra configuration.
 
 ---
 
