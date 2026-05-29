@@ -22,16 +22,17 @@ django-simple-email/
 │   │   ├── sample_data.json    # Default layout + welcome, password-reset, notification templates
 │   │   └── seasonal_data.json  # Halloween, Christmas, New Year layouts + welcome variations
 │   ├── tests/                  # Unit tests for the library
-│   │   ├── test_rendering.py   # Tests for render_template()
-│   │   ├── test_sending.py     # Tests for send_email()
+│   │   ├── test_rendering.py   # Tests for EmailTemplate.render()
+│   │   ├── test_sending.py     # Tests for send_template_mail()
+│   │   ├── test_validation.py  # Tests for template syntax validation
 │   │   └── test_admin.py       # Tests for preview and send-test admin views
 │   ├── templates/              # HTML templates (home page)
 │   ├── templatetags/           # Custom template tags
 │   ├── admin.py                # EmailLayoutAdmin, EmailTemplateAdmin (with preview + send test)
 │   ├── apps.py
-│   ├── models.py               # EmailLayout, EmailTemplate
-│   ├── rendering.py            # render_template() → (subject, html, text)
-│   ├── sending.py              # send_email(template_name, to, context, from_email)
+│   ├── models.py               # EmailLayout, EmailTemplate (render + send_email methods)
+│   ├── sending.py              # send_template_mail(template_name, recipient_list, context, subject, from_email)
+│   ├── validation.py           # validate_template_syntax(fields)
 │   ├── urls.py
 │   └── views.py
 ├── demo_project/               # Local Django project for development/testing
@@ -51,22 +52,34 @@ django-simple-email/
 Reusable header/footer that wraps multiple templates. Fields: `name`, `header_html`, `footer_html`.
 
 ### EmailTemplate
-The email itself. Fields: `name` (slug, used in code), `subject`, `html_body`, `text_body`, `layout` (FK, optional), `sample_context` (JSON used for preview and test send).
+The email itself. Fields: `name` (slug, used in code), `subject_default`, `html_body`, `text_body`, `layout` (FK, optional), `sample_context` (JSON used for preview and test send).
 
-Both `subject` and `html_body` support Django template syntax (`{{ var }}`, `{% if %}`, etc.).
+Both `subject_default` and `html_body` support Django template syntax (`{{ var }}`, `{% if %}`, etc.).
+
+The model exposes a convenience method `send_email()` that wraps `send_template_mail` passing its own `name`.
 
 ## Public API
 
 ```python
-from django_simple_email.sending import send_email
+from django_simple_email.sending import send_template_mail
 
-send_email(
-    template_name="welcome",       # EmailTemplate.name
-    to=["user@example.com"],
-    context={"name": "Ana"},       # merged on top of sample_context
+send_template_mail(
+    template_name="welcome",        # EmailTemplate.name
+    recipient_list=["u@example.com"],
+    context={"name": "Ana"},        # merged on top of sample_context
+    subject="Override subject",     # optional — overrides subject_default
     from_email="sender@example.com",  # optional
 )
 ```
+
+Or via the model instance:
+
+```python
+template = EmailTemplate.objects.get(name="welcome")
+template.send_email(recipient_list=["u@example.com"], context={"name": "Ana"})
+```
+
+`send_template_mail` delegates to Django's `EmailMultiAlternatives`, so it respects whatever `EMAIL_BACKEND` is configured. It integrates natively with **django-anymail** (no extra config needed — just set the backend).
 
 ## Development Commands (via taskipy)
 
@@ -80,7 +93,7 @@ All commands are run with `poetry run task <name>` from the project root:
 | `task migrate` | Apply database migrations |
 | `task setup` | Migrate + create superuser |
 | `task load-fixtures` | Load sample and seasonal fixtures into the demo DB |
-| `task test` | Run the full test suite (32 tests) |
+| `task test` | Run the full test suite (57 tests) |
 | `task lint` | Run ruff linter |
 | `task lint-fix` | Run ruff linter and auto-fix |
 

@@ -56,21 +56,161 @@ Each template stores a `sample_context` — a JSON object with example values. T
 
 ---
 
-## Sending email from code
+## Getting started
+
+### Step 1 — Create a layout
+
+A layout wraps templates with a shared header and footer. It is **optional** — templates without a layout render their body directly.
+
+**Via the admin**
+
+Go to **Email Layouts → Add**. Write your header and footer as plain HTML. Both fields support Django template syntax.
+
+```html
+<!-- header_html -->
+<table width="600" style="margin:0 auto;font-family:Arial,sans-serif;">
+  <tr><td style="background:#1a1a2e;padding:24px;color:#fff;">
+    <strong>{{ company_name }}</strong>
+  </td></tr>
+  <tr><td style="padding:32px;">
+```
+
+```html
+<!-- footer_html -->
+  </td></tr>
+  <tr><td style="background:#f4f4f4;padding:16px;text-align:center;font-size:12px;color:#aaa;">
+    © {{ company_name }}
+  </td></tr>
+</table>
+```
+
+**Or using fixture**
+
+```json
+[
+  {
+    "model": "django_simple_email.emaillayout",
+    "pk": 1,
+    "fields": {
+      "name": "default",
+      "header_html": "<table width=\"600\" style=\"margin:0 auto\"><tr><td style=\"background:#1a1a2e;padding:24px;color:#fff\"><strong>{{ company_name }}</strong></td></tr><tr><td style=\"padding:32px\">",
+      "footer_html": "</td></tr><tr><td style=\"padding:16px;text-align:center;font-size:12px;color:#aaa\">© {{ company_name }}</td></tr></table>"
+    }
+  }
+]
+```
+
+---
+
+### Step 2 — Create a template
+
+**Via the admin**
+
+Go to **Email Templates → Add**. The key fields:
+
+| Field | Description |
+|---|---|
+| **Name** | Slug used in your code — e.g. `welcome`, `password-reset` |
+| **Subject default** | Email subject. Supports `{{ variables }}` |
+| **HTML body** | Email body. Supports full Django template syntax |
+| **Text body** | Plain-text fallback (optional but recommended) |
+| **Layout** | Layout to wrap this template (optional) |
+| **Sample context** | JSON with example values — used by Preview and Send test |
+
+Example **sample context**:
+
+```json
+{
+  "name": "Ana Silva",
+  "company_name": "My App",
+  "cta_url": "https://example.com/dashboard"
+}
+```
+
+**Via fixture**
+
+```json
+[
+  {
+    "model": "django_simple_email.emailtemplate",
+    "pk": 1,
+    "fields": {
+      "name": "welcome",
+      "description": "Sent when a new user signs up",
+      "subject_default": "Welcome to {{ company_name }}, {{ name }}!",
+      "html_body": "<p>Hi <strong>{{ name }}</strong>, your account is ready.</p><p><a href=\"{{ cta_url }}\">Get started</a></p>",
+      "text_body": "Hi {{ name }},\n\nYour account is ready.\n\nGet started: {{ cta_url }}",
+      "layout": 1,
+      "sample_context": {
+        "name": "Ana Silva",
+        "company_name": "My App",
+        "cta_url": "https://example.com/dashboard"
+      }
+    }
+  }
+]
+```
+
+Load it with:
+
+```bash
+python manage.py loaddata your_fixture.json
+```
+
+---
+
+### Step 3 — Send from your code
+
+Call `send_template_mail` anywhere in your Django project — views, signals, Celery tasks, management commands:
 
 ```python
 from django_simple_email.sending import send_template_mail
 
 send_template_mail(
     template_name="welcome",
-    recipient_list=["user@example.com"],
-    context={"name": "Ana", "cta_url": "https://example.com/dashboard"},
+    recipient_list=[user.email],
+    context={
+        "name": user.get_full_name(),
+        "company_name": "My App",
+        "cta_url": request.build_absolute_uri("/dashboard/"),
+    },
 )
 ```
 
-The `context` you pass is merged on top of the template's `sample_context`. Both `subject_default` and `html_body` are rendered as Django templates with the merged context before sending.
+The `context` you pass is merged on top of the template's `sample_context` — you only need to pass the values that change per call.
 
-`send_template_mail` uses whatever `EMAIL_BACKEND` you have configured — no lock-in. This means it integrates natively with [django-anymail](https://anymail.dev): just install anymail, set your `EMAIL_BACKEND`, and all emails sent through this library will go through your chosen ESP (Mailgun, SendGrid, Postmark, Amazon SES, etc.) without any extra configuration.
+**Override the subject at call time**
+
+```python
+send_template_mail(
+    template_name="notification",
+    recipient_list=[user.email],
+    context={"message": "Your export is ready."},
+    subject="[Action required] Your export is ready",
+)
+```
+
+**Use a custom sender**
+
+```python
+send_template_mail(
+    template_name="welcome",
+    recipient_list=[user.email],
+    context={...},
+    from_email="onboarding@myapp.com",
+)
+```
+
+**Or call directly on a template instance**
+
+```python
+from django_simple_email.models import EmailTemplate
+
+template = EmailTemplate.objects.get(name="welcome")
+template.send_email(recipient_list=[user.email], context={"name": user.get_full_name()})
+```
+
+`send_template_mail` uses whatever `EMAIL_BACKEND` you have configured — no lock-in. It integrates natively with [django-anymail](https://anymail.dev): just install anymail, set your `EMAIL_BACKEND`, and emails will go through your chosen ESP (Mailgun, SendGrid, Postmark, Amazon SES, etc.) with no extra configuration.
 
 ---
 

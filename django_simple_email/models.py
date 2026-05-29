@@ -62,7 +62,11 @@ class EmailTemplate(models.Model):
         return self.name
 
     def clean(self):
-        validate_template_syntax({"subject_default": self.subject_default, "html_body": self.html_body, "text_body": self.text_body})
+        validate_template_syntax({
+            "subject_default": self.subject_default,
+            "html_body": self.html_body,
+            "text_body": self.text_body,
+        })
 
     def send_email(
         self,
